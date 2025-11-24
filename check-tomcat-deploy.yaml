@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tomcat
+  name: check-tomcat-deploy
+  namespace: cc-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tomcat
+  template:
+    metadata:
+      labels:
+        app: tomcat
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: tomcat
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - tomcat
+                topologyKey: kubernetes.io/hostname
+
+      containers:
+      - image: hambining/check-tomcat:v1.0
+        name: check-tomcat
+        env:
+        - name: DB_HOST
+          value: "10.0.3.15"
+        - name: DB_PORT
+          value: "3306"
+        - name: DB_NAME
+          value: "attendance"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASS
+          value: "1234"
+
+        resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
