@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: tomcat
-  name: check-tomcat-svc
+  name: cc-tomcat-svc
   namespace: cc-backend
 spec:
   ports:
@@ -12,3 +12,4 @@ spec:
     targetPort: 8080
   selector:
     app: tomcat
+  type: ClusterIP
