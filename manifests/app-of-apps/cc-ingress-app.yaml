@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cc-ingress-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/hambining/check-argoCD'
+    targetRevision: HEAD
+    path: manifests/ingress
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: cc-frontend
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
