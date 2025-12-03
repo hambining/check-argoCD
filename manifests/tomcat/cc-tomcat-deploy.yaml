@@ -22,11 +22,13 @@ spec:
     spec:
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchLabels:
-                  app: tomcat
-              topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: tomcat
+                topologyKey: kubernetes.io/hostname
 
       topologySpreadConstraints:
         - maxSkew: 1
@@ -37,40 +39,40 @@ spec:
               app: tomcat
 
       imagePullSecrets:
-      - name: ecr-secret
+        - name: ecr-secret
 
       containers:
-      - image: 013255266846.dkr.ecr.ap-northeast-2.amazonaws.com/check-tomcat:v1.0
-        name: check-tomcat
+        - image: 013255266846.dkr.ecr.ap-northeast-2.amazonaws.com/check-tomcat:v1.0
+          name: check-tomcat
 
-        envFrom:
-          - configMapRef:
-              name: cc-tomcat-configmap
-          - secretRef:
-              name: cc-tomcat-secret
+          envFrom:
+            - configMapRef:
+                name: cc-tomcat-configmap
+            - secretRef:
+                name: cc-tomcat-secret
 
-        resources:
-          requests:
-            cpu: 300m
-            memory: 512Mi
-          limits:
-            cpu: 300m
-            memory: 512Mi
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+            limits:
+              cpu: 300m
+              memory: 512Mi
 
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 20
-          periodSeconds: 5
-          failureThreshold: 5
-          timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            failureThreshold: 5
+            timeoutSeconds: 2
 
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          failureThreshold: 6
-          timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 6
+            timeoutSeconds: 2
