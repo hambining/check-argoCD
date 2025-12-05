@@ -9,7 +9,7 @@ spec:
     kind: Deployment
     name: cc-nginx-deploy
   minReplicas: 3
-  maxReplicas: 5
+  maxReplicas: 7
   metrics:
   - type: Resource
     resource:
