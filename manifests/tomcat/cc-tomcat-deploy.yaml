@@ -42,8 +42,9 @@ spec:
         - name: ecr-secret
 
       containers:
-        - image: 013255266846.dkr.ecr.ap-northeast-2.amazonaws.com/check-tomcat:v1.0
+        - image: 013255266846.dkr.ecr.ap-northeast-2.amazonaws.com/check-tomcat:v2.0
           name: check-tomcat
+          imagePullPolicy: Always
 
           envFrom:
             - configMapRef:
