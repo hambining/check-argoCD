@@ -64,16 +64,16 @@ spec:
             httpGet:
               path: /
               port: 8080
-            initialDelaySeconds: 20
-            periodSeconds: 5
-            failureThreshold: 5
-            timeoutSeconds: 2
+            initialDelaySeconds: 35
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
 
           livenessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: 20
+            initialDelaySeconds: 45
             periodSeconds: 10
-            failureThreshold: 6
-            timeoutSeconds: 2
+            failureThreshold: 3
+            timeoutSeconds: 5
